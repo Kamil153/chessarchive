@@ -21,3 +21,18 @@ nie mają dostępu.
 - PostgreSQL - system bazy danych
 - Django - web framework
 - Django ORM - system mapowania obiektowo-relacyjnego
+
+## Schemat bazy danych
+
+![schematBazy](C:\Users\Damian Cyper\PycharmProjects\chessarchive\schematBazy.png)
+
+## Opis tabel
+
+1. Użytkownicy aplikacji - tabela wszystkich użytkowników korzystających z aplikacji webowej
+2. Tempa gry - tabela wszystkich możliwych temp gry. Jeżeli podanego przez użytkownika tempa gry w danej partii nie ma w tabeli to jest ona dodawana automatycznie do bazy.
+3. Partie - tabela wszystkich partii w systemie. Zbiera partie wszystkich użytkowników w jedną tabelę.
+4. Szczegóły gracza - tabela zbierająca informacje na temat gracza aktualne w danej partii.
+5. Ruchy w partii - tabela informująca o ruchach w partii.
+6. Gracze - tabela zbierająca informacje o wprowadzonych graczach partii. Tabela zbiera w jedną tabelę wszystkich graczy wprowadzonych przez wszystkich użytkowników systemu
+7. Gracze_nick - tabela będąca rozszerzeniem tabeli Gracze. Przechowuje dodatkową informację na temat nicku gracza.
+8. Gracze_imie - tabela będąca rozszerzeniem tabeli Gracze. Przechowuje dodatkową informację na temat imienia i nazwiska gracza danej partii. Jeżeli użytkownik poda nick danego gracza to nie może podać imienia i nazwiska (i vice versa)
