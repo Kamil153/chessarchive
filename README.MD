@@ -24,7 +24,7 @@ nie mają dostępu.
 
 ## Schemat bazy danych
 
-![schematBazy](C:\Users\Damian Cyper\PycharmProjects\chessarchive\schematBazy.png)
+![schematBazy](.\schematBazy.png)
 
 ## Opis tabel
 
