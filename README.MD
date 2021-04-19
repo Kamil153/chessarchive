@@ -24,7 +24,7 @@ nie mają dostępu.
 
 ## Schemat bazy danych
 
-![schematBazy](.\schematBazy.png)
+![schematBazy](schematBazy.png)
 
 ## Opis tabel
 
