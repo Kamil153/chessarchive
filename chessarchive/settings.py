@@ -54,7 +54,7 @@ ROOT_URLCONF = 'chessarchive.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
+        'DIRS': [BASE_DIR / 'templates', str(BASE_DIR.joinpath('archive/templates'))]
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -119,3 +119,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
