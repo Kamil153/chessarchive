@@ -18,7 +18,7 @@ class GameTime(models.Model):
 
 class ChessGame(models.Model):
     id = models.AutoField(primary_key=True)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
     game_time = models.ForeignKey(GameTime, on_delete=models.CASCADE, default=0)
     note = models.TextField()
     game_date = models.DateField()
