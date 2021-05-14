@@ -4,10 +4,16 @@
 {% block title %}Login{% endblock %}
 
 {% block form %}
-  {% csrf_token %}
-  {{ form.as_p }}
-  <p class="clearfix mb-0 align-middle">
-    <a href="{% url 'signup' %}">Register</a>
-    <button class="btn btn-lg btn-primary btn-block float-end" type="submit">Sign in</button>
-  </p>
+  {% if user.is_authenticated %}
+      <p>You are logged in</p>
+      <a href="/">Back home</a>
+  {% else %}
+    {% csrf_token %}
+    {{ form.as_p }}
+    <p class="clearfix mb-0 align-middle">
+      <a href="{% url 'signup' %}">Register</a>
+      <button class="btn btn-lg btn-primary btn-block float-end" type="submit">Sign in</button>
+    </p>
+  {% endif %}
+
 {% endblock %}
