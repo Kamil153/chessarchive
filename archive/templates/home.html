@@ -18,13 +18,13 @@
                 <li class="nav-item active">
                     <a class="nav-link text-white" href="/">
                         <i class="fa fa-home" aria-hidden="true" style="color: white; font-size: 20px;"></i>
-                        Strona Główna
+                        Home
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-white" href="/profile">
                         <i class="fa fa-user" aria-hidden="true" style="color: white; font-size: 20px;"></i>
-                        Profil
+                        Profile
                     </a>
                 </li>
 
@@ -32,7 +32,7 @@
                     <li class="nav-item">
                         <a class="nav-link text-white" href="/admin">
                             <i class="fa fa-cogs" aria-hidden="true" style="color: white; font-size: 20px;"></i>
-                            Ustawienia
+                            Settings
                         </a>
                     </li>
                 {% endif %}
@@ -40,7 +40,7 @@
                 <li class="nav-item">
                     <a class="nav-link text-white" href="{% url 'logout' %}">
                         <i class="fa fa-sign-out" aria-hidden="true" style="color: white; font-size: 20px;"></i>
-                        Wyloguj
+                        Logout
                     </a>
                 </li>
             </ul>
@@ -48,15 +48,15 @@
     </nav>
 
     <div class="container d-flex flex-column justify-content-center">
-      <h2 class="text-center" style="width: 100%; margin: 20px 0">Witaj, {{ user.username }} !</h2>
+      <h2 class="text-center" style="width: 100%; margin: 20px 0">Hello, {{ user.username }} !</h2>
 
       <div class="d-flex justify-content-center">
         <button class="btn btn-success btn-lg" style="margin-right: 5px">
-          Wyświetl archiwum
+          Show archive
         </button>
 
         <button class="btn btn-outline-danger btn-lg" style="margin-left: 5px">
-          Dodaj nową partię
+          Add new game
         </button>
       </div>
 
