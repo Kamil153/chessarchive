@@ -26,7 +26,7 @@ class ChessGame(models.Model):
 
 
 class Movement(models.Model):
-    game_id = models.ForeignKey(ChessGame, on_delete=models.CASCADE, default=0)
+    game = models.ForeignKey(ChessGame, on_delete=models.CASCADE, default=0)
     move_nr = models.IntegerField()
     white_move = models.CharField(max_length=5)
     black_move = models.CharField(max_length=5)
@@ -43,4 +43,4 @@ class PlayerDetail(models.Model):
     rate = models.IntegerField()
     color = models.CharField(max_length=6, choices=COLORS, default='white')
     player = models.ForeignKey(ChessPlayer, on_delete=models.CASCADE, default=0)
-    game_id = models.ForeignKey(ChessGame, on_delete=models.CASCADE, default=0)
+    game = models.ForeignKey(ChessGame, on_delete=models.CASCADE, default=0)
