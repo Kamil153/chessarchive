@@ -1,0 +1,21 @@
+<!-- templates/registration/login.html -->
+{% extends 'registration/base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block form %}
+  {% if user.is_authenticated %}
+      <p>You are logged in</p>
+      <a href="/">Back home</a>
+  {% else %}
+    {% csrf_token %}
+    {{ form.as_p }}
+    <p class="clearfix mb-0 align-middle">
+      <a href="{% url 'signup' %}">Register</a>
+      <button class="btn btn-lg btn-primary btn-block float-end" type="submit">Sign in</button>
+      <br>
+      <a href="{% url 'logout' %}">Forgot your password?</a>
+    </p>
+  {% endif %}
+
+{% endblock %}

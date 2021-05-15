@@ -1,0 +1,15 @@
+html, body {
+  height: 100%;
+}
+
+form.login {
+}
+
+form.login input {
+  width: auto;
+  float: right;
+}
+
+form.login label {
+  width: 150px;
+}
