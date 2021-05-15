@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+{% block title %}Home{% endblock %}
+
+{% load static %}
+
+{% block content %}
+<div class="list-group">
+  {% for game in object_list %}
+    <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+      {{ game.note }}
+      <div>{{ game.game_date }}</div>
+    </a>
+  {% endfor %}
+</div>
+{% endblock %}

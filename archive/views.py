@@ -1,7 +1,9 @@
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 from django.views import generic
+from archive.models import ChessGame
 
 
 class SignUpView(generic.CreateView):
@@ -18,3 +20,8 @@ class EditProfileView(generic.UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
+
+
+class GameList(generic.ListView, LoginRequiredMixin):
+    model = ChessGame
+
