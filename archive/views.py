@@ -15,3 +15,6 @@ class EditProfileView(generic.UpdateView):
     success_url = reverse_lazy('home')
     template_name = 'profile.html'
     fields = ['email', 'username']
+
+    def get_object(self, queryset=None):
+        return self.request.user
