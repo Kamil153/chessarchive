@@ -7,9 +7,9 @@
       <h2 class="text-center" style="width: 100%; margin: 20px 0">Hello, {{ user.username }} !</h2>
 
       <div class="d-flex justify-content-center">
-        <button class="btn btn-success btn-lg" style="margin-right: 5px">
+        <a class="btn btn-success btn-lg" href="{% url 'list' %}" role="button" style="margin-right: 5px">
           Show archive
-        </button>
+        </a>
 
         <button class="btn btn-outline-danger btn-lg" style="margin-left: 5px">
           Add new game
