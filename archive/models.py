@@ -8,7 +8,6 @@ COLORS = (
 
 
 class GameTime(models.Model):
-    id = models.AutoField(primary_key=True)
     game_time = models.IntegerField()
     time_increment = models.IntegerField()
 
@@ -17,7 +16,6 @@ class GameTime(models.Model):
 
 
 class ChessGame(models.Model):
-    id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
     game_time = models.ForeignKey(GameTime, on_delete=models.CASCADE, default=0)
     note = models.TextField()
@@ -28,7 +26,6 @@ class ChessGame(models.Model):
 
 
 class Movement(models.Model):
-    id = models.AutoField(primary_key=True)
     game_id = models.ForeignKey(ChessGame, on_delete=models.CASCADE, default=0)
     move_nr = models.IntegerField()
     white_move = models.CharField(max_length=5)
@@ -36,7 +33,6 @@ class Movement(models.Model):
 
 
 class ChessPlayer(models.Model):
-    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
 
     def __str__(self):
@@ -44,7 +40,6 @@ class ChessPlayer(models.Model):
 
 
 class PlayerDetail(models.Model):
-    id = models.AutoField(primary_key=True)
     rate = models.IntegerField()
     color = models.CharField(max_length=6, choices=COLORS, default='white')
     player = models.ForeignKey(ChessPlayer, on_delete=models.CASCADE, default=0)
