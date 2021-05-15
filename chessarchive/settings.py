@@ -53,8 +53,10 @@ ROOT_URLCONF = 'chessarchive.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates', str(BASE_DIR.joinpath('archive/templates'))]
-        ,
+        'DIRS': [
+            BASE_DIR / 'templates',
+            str(BASE_DIR.joinpath('archive/templates'))
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
