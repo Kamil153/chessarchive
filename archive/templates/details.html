@@ -4,6 +4,7 @@
 {% load static %}
 
 {% block content %}
+{% if user.is_authenticated %}
   <div class="d-flex">
     <table class="table m-3">
       <tbody>
@@ -37,6 +38,11 @@
           <th scope="row">Note</th>
           <td>{{ object.note }}</td>
         </tr>
+        <tr>
+          <td>
+            <a class="btn btn-primary" href="{% url 'list' %}">Go Back</a>
+          </td>
+        </tr>
       </tbody>
     </table>
     <table class="table m-3">
@@ -58,4 +64,10 @@
       </tbody>
     </table>
   </div>
+{% else %}
+<div class="container text-center">
+    <h2 class="text-center">You are not logged in</h2>
+    <a href="{% url 'login' %}">Log In</a>
+</div>
+{% endif %}
 {% endblock %}

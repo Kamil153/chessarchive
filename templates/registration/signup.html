@@ -4,13 +4,12 @@
 
 {% block form %}
   {% if user.is_authenticated %}
-      <p>You are logged in</p>
-      <a href="/">Back home</a>
+    <p>You are logged in</p>
   {% else %}
     <h2>Sign up</h2>
     {% csrf_token %}
     {{ form.as_p }}
     <button class="btn btn-lg btn-primary btn-block float-end" type="submit">Sign Up</button>
   {% endif %}
-
+    <a href="/">Back home</a>
 {% endblock %}

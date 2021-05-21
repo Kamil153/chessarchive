@@ -4,6 +4,7 @@
 {% load static %}
 
 {% block content %}
+{% if user.is_authenticated %}
 <form method="post" action="/add_game_form_submission/">
   {% csrf_token %}
     <div class="form-row d-flex justify-content-center">
@@ -30,12 +31,12 @@
 
     <div class="form-row d-flex justify-content-center">
         <div class="form-group col-md-4 m-2">
-            <label for="time">Game time</label>
+            <label for="time">Game time (minutes)</label>
             <input type="number" class="form-control" id="time" name="time" min="1">
         </div>
 
         <div class="form-group col-md-4 m-2">
-            <label for="increment">Increment</label>
+            <label for="increment">Increment (seconds)</label>
             <input type="number" class="form-control" id="increment" name="increment" min="0">
         </div>
     </div>
@@ -63,4 +64,10 @@
         <button type="submit" class="btn btn-success btn-lg m-5 px-5">Add</button>
     </div>
 </form>
+{% else %}
+<div class="container text-center">
+    <h2 class="text-center">You are not logged in</h2>
+    <a href="{% url 'login' %}">Log In</a>
+</div>
+{% endif %}
 {% endblock %}
