@@ -7,8 +7,10 @@ from archive.models import ChessGame, ChessPlayer, PlayerDetail, GameTime, Movem
 
 from django.shortcuts import render, redirect
 import chess.pgn
-import chess
+import chess, chess.svg
 import io
+from chessboard import display
+from time import sleep
 
 
 class SignUpView(generic.CreateView):
@@ -85,7 +87,7 @@ def add_game_form_submission(request):
         node = next_node
 
     if len(moves_list) % 2 != 0:
-        moves_list.append("resign")
+        moves_list.append("end_game")
 
     i, j = 1, 0
     while j < len(moves_list):
@@ -104,7 +106,27 @@ class GameDetailView(generic.DetailView):
         context = super().get_context_data(**kwargs)
         game: ChessGame = context['object']
         context['sorted_moves'] = game.movement_set.order_by('move_nr')
+        context['svg_list'] = self.svg_list(context)
+        context['svg'] = chess.svg.board(chess.Board(), size=350)
         return context
+
+    def svg_list(self, context):
+        moves_list = self.get_moves_list(context['sorted_moves'])
+        board = chess.Board()
+        svg_list = [chess.svg.board(chess.Board(), size=350)]
+        for move in moves_list:
+            if move != 'end_game':
+                board.push_san(move)
+                svg_list.append(chess.svg.board(board, size=350))
+
+        return svg_list
+
+    def get_moves_list(self, context):
+        moves_list = []
+        for move in context:
+            moves_list.append(move.white_move)
+            moves_list.append(move.black_move)
+        return moves_list
 
 
 def delete_event(request, game_id):
