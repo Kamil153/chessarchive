@@ -4,7 +4,7 @@
 {% load static %}
 
 {% block content %}
-<table class="table">
+<table class="table align-middle">
   <tbody>
     {% for game in object_list %}
       <tr>
@@ -15,6 +15,9 @@
           {% for player_detail in game.playerdetail_set.all %}
             {{ player_detail.player.name }}
           {% endfor %}
+        </td>
+        <td>
+          <a class="btn btn-primary" href="{% url 'details' pk=game.id %}" role="button">Details</a>
         </td>
       </tr>
     {% endfor %}
