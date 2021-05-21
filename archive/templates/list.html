@@ -13,7 +13,7 @@
         <td>{{ game.game_date }}</td>
         <td>
           {% for player_detail in game.playerdetail_set.all %}
-            {{ player_detail.player.name }}
+            {{ player_detail.player.name }} ({{ player_detail.rate }})
           {% endfor %}
         </td>
         <td>
