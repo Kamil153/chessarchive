@@ -18,6 +18,7 @@
         </td>
         <td>
           <a class="btn btn-primary" href="{% url 'details' pk=game.id %}" role="button">Details</a>
+          <a class="btn btn-danger" href="{% url 'delete-game' game.id %}" role="button">Delete</a>
         </td>
       </tr>
     {% endfor %}

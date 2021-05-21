@@ -5,8 +5,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 from archive.models import ChessGame, ChessPlayer, PlayerDetail, GameTime, Movement
 
-from django.shortcuts import render
-from pgn_parser import pgn, parser
+from django.shortcuts import render, redirect
 import chess.pgn
 import chess
 import io
@@ -96,3 +95,28 @@ def add_game_form_submission(request):
         j += 2
 
     return render(request, "add_game.html")
+
+
+class GameDetailView(generic.DetailView):
+    model = ChessGame
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        game: ChessGame = context['object']
+        context['sorted_moves'] = game.movement_set.order_by('move_nr')
+        return context
+
+
+def delete_event(request, game_id):
+    game = ChessGame.objects.get(id=game_id)
+    game.delete()
+
+    movement = Movement.objects.filter(game=game_id)
+    for move in movement:
+        move.delete()
+
+    player_details = PlayerDetail.objects.filter(game=game_id)
+    for detail in player_details:
+        detail.delete()
+
+    return redirect('list')  # list-events

@@ -1,0 +1,61 @@
+{% extends 'layout.html' %}
+{% block title %}Home{% endblock %}
+
+{% load static %}
+
+{% block content %}
+  <div class="d-flex">
+    <table class="table m-3">
+      <tbody>
+        <tr>
+          <th scope="row">Date</th>
+          <td>{{ object.game_date }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Players</th>
+          <td>
+            <ul class="list-unstyled">
+              {% for playerdetail in object.playerdetail_set.all %}
+                <li>
+                  {{ playerdetail.player.name }}
+                  {% if playerdetail.color == "white" %}
+                    <span class="badge bg-light text-dark">White</span>
+                  {% endif %}
+                  {% if playerdetail.color == "black" %}
+                    <span class="badge bg-dark">Black</span>
+                  {% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Game time</th>
+          <td>{{ object.game_time.game_time }}+{{ object.game_time.time_increment }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Note</th>
+          <td>{{ object.note }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table m-3">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">White</th>
+          <th scope="col">Black</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for move in sorted_moves %}
+          <tr>
+            <th scope="row">{{ move.move_nr }}</th>
+            <td>{{ move.white_move }}</td>
+            <td>{{ move.black_move }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
