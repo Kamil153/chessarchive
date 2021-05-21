@@ -41,12 +41,14 @@
           </tr>
         </tbody>
       </table>
-      <div id="svg_div">
-        <a class="btn btn-primary mb-3" href="{% url 'list' %}">Go Back</a><br>
+      <div id="svg_div" class="d-flex flex-column justify-content-center">
+        <a class="btn btn-primary mb-3" href="{% url 'list' %}" style="width:100px">Go Back</a><br>
+        <div class="d-flex justify-content-center">
           {{svg |safe}}
-        <div id="buttons" class="d-flex mt-3">
-          <a class="btn btn-primary mx-3" onclick="prev_move({{svg_list}})">Prev</a><br>
-          <a class="btn btn-primary" onclick="next_move({{svg_list}})">Next</a><br>
+        </div>
+        <div id="buttons" class="d-flex justify-content-center mt-3">
+          <a class="btn btn-primary mr-5" onclick="prev_move({{svg_list}})" style="margin-right: 5px">Prev</a><br>
+          <a class="btn btn-primary ml-5" onclick="next_move({{svg_list}})" style="margin-left: 5px">Next</a><br>
         </div>
       </div>
     </div>
@@ -79,6 +81,8 @@
         if(counter < svg_list.length - 1){
           elem.removeChild(elem.children[2])
           let div = document.createElement("div")
+          div.classList.add("d-flex")
+          div.classList.add("justify-content-center")
           div.innerHTML = svg_list[++counter]
           elem.insertBefore(div, buttons)
         }
@@ -90,6 +94,8 @@
         if(counter > 0){
           elem.removeChild(elem.children[2])
           let div = document.createElement("div")
+          div.classList.add("d-flex")
+          div.classList.add("justify-content-center")
           div.innerHTML = svg_list[--counter]
           elem.insertBefore(div, buttons)
         }

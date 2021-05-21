@@ -107,17 +107,17 @@ class GameDetailView(generic.DetailView):
         game: ChessGame = context['object']
         context['sorted_moves'] = game.movement_set.order_by('move_nr')
         context['svg_list'] = self.svg_list(context)
-        context['svg'] = chess.svg.board(chess.Board(), size=350)
+        context['svg'] = chess.svg.board(chess.Board(), size=400)
         return context
 
     def svg_list(self, context):
         moves_list = self.get_moves_list(context['sorted_moves'])
         board = chess.Board()
-        svg_list = [chess.svg.board(chess.Board(), size=350)]
+        svg_list = [chess.svg.board(chess.Board(), size=400)]
         for move in moves_list:
             if move != 'end_game':
                 board.push_san(move)
-                svg_list.append(chess.svg.board(board, size=350))
+                svg_list.append(chess.svg.board(board, size=400))
 
         return svg_list
 
