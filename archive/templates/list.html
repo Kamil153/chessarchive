@@ -4,12 +4,23 @@
 {% load static %}
 
 {% block content %}
-<div class="list-group">
-  {% for game in object_list %}
-    <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-      {{ game.note }}
-      <div>{{ game.game_date }}</div>
-    </a>
-  {% endfor %}
-</div>
+<table class="table align-middle">
+  <tbody>
+    {% for game in object_list %}
+      <tr>
+        <td>{{ game.note }}</td>
+        <td>{{ game.game_time.game_time }}+{{ game.game_time.time_increment }}</td>
+        <td>{{ game.game_date }}</td>
+        <td>
+          {% for player_detail in game.playerdetail_set.all %}
+            {{ player_detail.player.name }} ({{ player_detail.rate }})
+          {% endfor %}
+        </td>
+        <td>
+          <a class="btn btn-primary" href="{% url 'details' pk=game.id %}" role="button">Details</a>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
 {% endblock %}
