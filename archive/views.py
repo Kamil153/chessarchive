@@ -25,3 +25,13 @@ class EditProfileView(generic.UpdateView):
 class GameList(generic.ListView, LoginRequiredMixin):
     model = ChessGame
 
+
+class GameDetailView(generic.DetailView):
+    model = ChessGame
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        game: ChessGame = context['object']
+        context['sorted_moves'] = game.movement_set.order_by('move_nr')
+        return context
+
