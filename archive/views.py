@@ -7,10 +7,9 @@ from archive.models import ChessGame, ChessPlayer, PlayerDetail, GameTime, Movem
 
 from django.shortcuts import render, redirect
 import chess.pgn
-import chess, chess.svg
+import chess
+import chess.svg
 import io
-from chessboard import display
-from time import sleep
 
 
 class SignUpView(generic.CreateView):
