@@ -4,58 +4,107 @@
 {% load static %}
 
 {% block content %}
+{% if user.is_authenticated %}
   <div class="d-flex">
-    <table class="table m-3">
-      <tbody>
-        <tr>
-          <th scope="row">Date</th>
-          <td>{{ object.game_date }}</td>
-        </tr>
-        <tr>
-          <th scope="row">Players</th>
-          <td>
-            <ul class="list-unstyled">
-              {% for playerdetail in object.playerdetail_set.all %}
-                <li>
-                  {{ playerdetail.player.name }}
-                  {% if playerdetail.color == "white" %}
-                    <span class="badge bg-light text-dark">White</span>
-                  {% endif %}
-                  {% if playerdetail.color == "black" %}
-                    <span class="badge bg-dark">Black</span>
-                  {% endif %}
-                </li>
-              {% endfor %}
-            </ul>
-          </td>
-        </tr>
-        <tr>
-          <th scope="row">Game time</th>
-          <td>{{ object.game_time.game_time }}+{{ object.game_time.time_increment }}</td>
-        </tr>
-        <tr>
-          <th scope="row">Note</th>
-          <td>{{ object.note }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="col-md-8 m-3">
+      <table class="table">
+        <tbody>
+          <tr>
+            <th scope="row">Date</th>
+            <td>{{ object.game_date }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Players</th>
+            <td>
+              <ul class="list-unstyled">
+                {% for playerdetail in object.playerdetail_set.all %}
+                  <li>
+                    {{ playerdetail.player.name }}
+                    {% if playerdetail.color == "white" %}
+                      <span class="badge bg-light text-dark">White</span>
+                    {% endif %}
+                    {% if playerdetail.color == "black" %}
+                      <span class="badge bg-dark">Black</span>
+                    {% endif %}
+                  </li>
+                {% endfor %}
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">Game time</th>
+            <td>{{ object.game_time.game_time }}+{{ object.game_time.time_increment }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Note</th>
+            <td>{{ object.note }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div id="svg_div" class="d-flex flex-column justify-content-center">
+        <a class="btn btn-primary mb-3" href="{% url 'list' %}" style="width:100px">Go Back</a><br>
+        <div class="d-flex justify-content-center">
+          {{svg |safe}}
+        </div>
+        <div id="buttons" class="d-flex justify-content-center mt-3">
+          <a class="btn btn-primary mr-5" onclick="prev_move({{svg_list}})" style="margin-right: 5px">Prev</a><br>
+          <a class="btn btn-primary ml-5" onclick="next_move({{svg_list}})" style="margin-left: 5px">Next</a><br>
+        </div>
+      </div>
+    </div>
+
     <table class="table m-3">
       <thead>
         <tr>
           <th scope="col">#</th>
-          <th scope="col">Black</th>
           <th scope="col">White</th>
+          <th scope="col">Black</th>
         </tr>
       </thead>
       <tbody>
         {% for move in sorted_moves %}
           <tr>
             <th scope="row">{{ move.move_nr }}</th>
-            <td>{{ move.black_move }}</td>
             <td>{{ move.white_move }}</td>
+            <td>{{ move.black_move }}</td>
           </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
+
+  <script>
+    let counter = 0;
+    function next_move(svg_list){
+        let elem = document.getElementById('svg_div')
+        let buttons = document.getElementById('buttons')
+        if(counter < svg_list.length - 1){
+          elem.removeChild(elem.children[2])
+          let div = document.createElement("div")
+          div.classList.add("d-flex")
+          div.classList.add("justify-content-center")
+          div.innerHTML = svg_list[++counter]
+          elem.insertBefore(div, buttons)
+        }
+    }
+
+    function prev_move(svg_list){
+        let elem = document.getElementById('svg_div')
+        let buttons = document.getElementById('buttons')
+        if(counter > 0){
+          elem.removeChild(elem.children[2])
+          let div = document.createElement("div")
+          div.classList.add("d-flex")
+          div.classList.add("justify-content-center")
+          div.innerHTML = svg_list[--counter]
+          elem.insertBefore(div, buttons)
+        }
+    }
+  </script>
+{% else %}
+<div class="container text-center">
+    <h2 class="text-center">You are not logged in</h2>
+    <a href="{% url 'login' %}">Log In</a>
+</div>
+{% endif %}
 {% endblock %}

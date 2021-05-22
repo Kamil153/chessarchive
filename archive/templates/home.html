@@ -11,9 +11,9 @@
           Show archive
         </a>
 
-        <button class="btn btn-outline-danger btn-lg" style="margin-left: 5px">
+        <a class="btn btn-outline-danger btn-lg" style="margin-left: 5px" href="{% url 'add_game' %}">
           Add new game
-        </button>
+        </a>
       </div>
 
     </div>
@@ -23,7 +23,5 @@
     <h2 class="text-center">You are not logged in</h2>
     <a href="{% url 'login' %}">Log In</a>
 </div>
-
-
 {% endif %}
 {% endblock %}

@@ -21,15 +21,12 @@ class ChessGame(models.Model):
     note = models.TextField()
     game_date = models.DateField()
 
-    def __str__(self):
-        return str(self.id)
-
 
 class Movement(models.Model):
     game = models.ForeignKey(ChessGame, on_delete=models.CASCADE, default=0)
     move_nr = models.IntegerField()
-    white_move = models.CharField(max_length=5)
-    black_move = models.CharField(max_length=5)
+    white_move = models.CharField(max_length=9)
+    black_move = models.CharField(max_length=9)
 
 
 class ChessPlayer(models.Model):
