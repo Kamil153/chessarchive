@@ -11,5 +11,6 @@ urlpatterns = [
     path('add_game/', views.add_game, name='add_game'),
     path('game/<int:pk>/', GameDetailView.as_view(template_name='details.html'), name='details'),
     path('delete_game/<game_id>/', views.delete_event, name='delete-game'),
-    path('game/sort_by/', views.sort_by, name='sort_by')
+    path('game/sort_by/', views.sort_by, name='sort_by'),
+    path('game/filter_by', views.filter_by, name="filter_by")
 ]
