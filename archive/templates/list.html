@@ -5,6 +5,23 @@
 
 {% block content %}
 {% if user.is_authenticated %}
+<div class="container d-flex justify-content-center">
+  <div class="col-md-3 m-5">
+      <label for="sorting_options">Sort by</label>
+      <form method="post" action="{% url 'sort_by' %}" class=" d-flex">
+        {% csrf_token %}
+        <select id="sorting_options" name="sorting_options" class="form-select form-select-sm mr-3">
+          <option name="game_date_asc">date - asc</option>
+          <option name="game_date_desc">date - desc</option>
+          <option name="game_time_asc">game time - asc</option>
+          <option name="game_time_desc">game time - desc</option>
+          <option name="note_asc" selected>note - asc</option>
+          <option name="note_desc" selected>note - desc</option>
+        </select>
+        <button class="btn btn-primary" type="submit">Sort</button>
+      </form>
+  </div>
+</div>
 <table class="table align-middle">
   <tbody>
     {% for game in object_list %}
