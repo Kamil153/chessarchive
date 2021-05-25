@@ -8,15 +8,15 @@
 <div class="container d-flex justify-content-center flex-column">
   <div class="col-md-3 my-5">
       <label for="sorting_options">Sort by</label>
-      <form method="post" action="{% url 'sort_by' %}" class=" d-flex">
+      <form method="get" action="{% url 'list' %}" class=" d-flex">
         {% csrf_token %}
         <select id="sorting_options" name="sorting_options" class="form-select form-select-sm mr-3">
-          <option name="game_date_asc">date - asc</option>
-          <option name="game_date_desc">date - desc</option>
-          <option name="game_time_asc">game time - asc</option>
-          <option name="game_time_desc">game time - desc</option>
-          <option name="note_asc" selected>note - asc</option>
-          <option name="note_desc" selected>note - desc</option>
+          <option value="date">Date(asc)</option>
+          <option value="-date">Date(desc)</option>
+          <option value="game_time">Game time (asc)</option>
+          <option value="-game_time">Game time (desc) </option>
+          <option value="note" selected>Note (asc)</option>
+          <option value="-note">Note (desc)</option>
         </select>
         <button class="btn btn-primary" type="submit">Sort</button>
       </form>
@@ -28,7 +28,7 @@
     </button>
     <div id="filters" class="collapse mt-5 container">
         <div class="card card-body row container">
-          <form method="post" action="{% url 'filter_by' %}" class="row ">
+          <form method="get" action="{% url 'list' %}" class="row ">
             {% csrf_token %}
             <div class="form-group col-xl-2 col-md-6 d-flex flex-column mb-5">
               <label>Search by player name:</label>
@@ -51,6 +51,7 @@
             <div class="form-group col-xl-2 col-md-6 d-flex flex-column">
               <label>Search by first move:</label>
               <select id="first_move" name="first_move" class="form-select form-select-sm mr-3">
+                <option disabled selected value="False">--select first move--</option>
                 <option name="e4">e4</option>
                 <option name="e4">d4</option>
               </select>
