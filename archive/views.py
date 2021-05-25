@@ -1,6 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.db.models.functions import Coalesce
 from django.urls import reverse_lazy
 from django.views import generic
 from archive.models import ChessGame, ChessPlayer, PlayerDetail, GameTime, Movement
@@ -144,3 +145,61 @@ def delete_event(request, game_id):
         detail.delete()
 
     return redirect('list')  # list-events
+
+
+def sort_by(request):
+    selected_option = request.POST.get('sorting_options', False)
+    games = ChessGame.objects.all()
+    if selected_option is not False:
+        if selected_option == 'note - asc':
+            games = ChessGame.objects.order_by('note')
+        elif selected_option == 'note - desc':
+            games = ChessGame.objects.order_by('-note')
+
+        elif selected_option == 'date - asc':
+            games = ChessGame.objects.order_by('game_date')
+        elif selected_option == 'date - desc':
+            games = ChessGame.objects.order_by('-game_date')
+
+        elif selected_option == 'game time - asc':
+            games = ChessGame.objects.order_by('game_time')
+        elif selected_option == 'game time - desc':
+            games = ChessGame.objects.order_by('-game_time')
+
+        context = {
+            'object_list': games
+        }
+        return render(request=request, template_name='list.html', context=context)
+    return redirect('list')
+
+
+def filter_by(request):
+    player_name = request.POST.get('player_name', False)
+    date_from = request.POST.get('date_from', False)
+    date_to = request.POST.get('date_to', False)
+    ranking_from = request.POST.get('ranking_from', False)
+    ranking_to = request.POST.get('ranking_to', False)
+    game_time = request.POST.get('game_time', False)
+    first_move = request.POST.get('first_move', False)
+    games = ChessGame.objects.all()
+
+    if player_name != '':
+        games = games.filter(playerdetail__player__name=player_name)
+    if date_from != '':
+        games = games.filter(game_date__gte=date_from)
+    if date_to != '':
+        games = games.filter(game_date__lte=date_to)
+    if ranking_from != '':
+        games = games.filter(playerdetail__rate__gte=ranking_from)
+    if ranking_to != '':
+        games = games.filter(playerdetail__rate__lte=ranking_to)
+    if game_time != '':
+        time = GameTime.objects.get(game_time=game_time)
+        games = games.filter(game_time=time)
+    if first_move != '':
+        games = games.filter(movement__move_nr=1, movement__white_move=first_move)
+
+    context = {
+        'object_list': games
+    }
+    return render(request=request, template_name='list.html', context=context)

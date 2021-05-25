@@ -5,6 +5,62 @@
 
 {% block content %}
 {% if user.is_authenticated %}
+<div class="container d-flex justify-content-center flex-column">
+  <div class="col-md-3 my-5">
+      <label for="sorting_options">Sort by</label>
+      <form method="post" action="{% url 'sort_by' %}" class=" d-flex">
+        {% csrf_token %}
+        <select id="sorting_options" name="sorting_options" class="form-select form-select-sm mr-3">
+          <option name="game_date_asc">date - asc</option>
+          <option name="game_date_desc">date - desc</option>
+          <option name="game_time_asc">game time - asc</option>
+          <option name="game_time_desc">game time - desc</option>
+          <option name="note_asc" selected>note - asc</option>
+          <option name="note_desc" selected>note - desc</option>
+        </select>
+        <button class="btn btn-primary" type="submit">Sort</button>
+      </form>
+  </div>
+
+  <div class="mb-5 container">
+    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#filters" aria-expanded="false" aria-controls="collapseExample">
+      Filters
+    </button>
+    <div id="filters" class="collapse mt-5 container">
+        <div class="card card-body row container">
+          <form method="post" action="{% url 'filter_by' %}" class="row ">
+            {% csrf_token %}
+            <div class="form-group col-xl-2 col-md-6 d-flex flex-column mb-5">
+              <label>Search by player name:</label>
+              <input id="player_name" name="player_name">
+            </div>
+            <div class="form-group col-xl-2 col-md-6 d-flex flex-column mb-5">
+              <label>Search by date interval:</label>
+              <input name="date_from" id="date_from" type="date">
+              <input name="date_to" id="date_to" type="date">
+            </div>
+            <div class="form-group col-xl-3 col-md-6 d-flex flex-column mb-5">
+              <label>Search by ranking interval:</label>
+              <input name="ranking_from" id="ranking_from" type="number">
+              <input name="ranking_to" id="ranking_to" type="number">
+            </div>
+            <div class="form-group col-xl-2 col-md-6 d-flex flex-column mb-5" >
+              <label>Search by game time:</label>
+              <input type="number" min="1" name="game_time" id="game_time">
+            </div>
+            <div class="form-group col-xl-2 col-md-6 d-flex flex-column">
+              <label>Search by first move:</label>
+              <select id="first_move" name="first_move" class="form-select form-select-sm mr-3">
+                <option name="e4">e4</option>
+                <option name="e4">d4</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3 col-xl-2 col-md-6">Search</button>
+          </form>
+        </div>
+      </div>
+  </div>
+</div>
 <table class="table align-middle">
   <tbody>
     {% for game in object_list %}
