@@ -28,37 +28,37 @@ Projekt jest aplikacją webową, która obsługuje bazę danych dla archiwum par
 
 1. Użytkownik niezalogowany ma jedynie możliwość zalogowania się lub założenia konta
 
-   ![not_logged](screens\not_logged.png)
+   ![not_logged](screens/not_logged.png)
 
 2. Użytkownik może zalogować się...
 
-   ![log_in](screens\log_in.png)
+   ![log_in](screens/log_in.png)
 
 3. ...lub założyć nowe konto
 
-   ![sign_up](screens\sign_up.png)
+   ![sign_up](screens/sign_up.png)
 
 4. Ma również możliwość resetowania hasła
 
-   ![reset](screens\reset.png)
+   ![reset](screens/reset.png)
 
 5. Po zalogowaniu użytkownik widzi stronę domową (administrator ma dodatkowe pole "Settings", którego nie widzi każdy inny użytkownik bez uprawnień)
 
-   ![home](screens\home.png)
+   ![home](screens/home.png)
 
 6. Użytkownik może edytować informacje takie jak adres email oraz nazwa użytkownika. Może również zmienić hasło (zostanie przeniesiony na widok nr 4)
 
-   ![edit](screens\edit.png)
+   ![edit](screens/edit.png)
 
 7. Każdy zalogowany użytkownik ma opcję dodania nowej partii do swojej bazy
 
-   ![add_view](screens\add_view.png)
+   ![add_view](screens/add_view.png)
 
 8. Może również zobaczyć całe swoje archiwum
 
-   ![archive_view](screens\archive_view.png)
+   ![archive_view](screens/archive_view.png)
 
 9. Ma też dostęp do dokładniejszych informacji każdej z partii
 
-   ![details](screens\details.png)
+   ![details](screens/details.png)
 
