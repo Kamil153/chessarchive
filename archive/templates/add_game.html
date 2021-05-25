@@ -14,7 +14,7 @@
         </div>
         <div class="form-group col-md-4 m-2">
             <label for="whiteRank">White rank</label>
-            <input class="form-control" id="whiteRank" name="whiteRank" type="number" min="0" required>
+            <input class="form-control" id="whiteRank" name="whiteRank" type="number" min="100" max="3100" required>
         </div>
     </div>
 
@@ -25,19 +25,19 @@
         </div>
         <div class="form-group col-md-4 m-2">
             <label for="blackRank">Black rank</label>
-            <input class="form-control" id="blackRank" name="blackRank" type="number" min="0" required>
+            <input class="form-control" id="blackRank" name="blackRank" type="number" min="100" max="3100" required>
         </div>
     </div>
 
     <div class="form-row d-flex justify-content-center">
         <div class="form-group col-md-4 m-2">
             <label for="time">Game time (minutes)</label>
-            <input type="number" class="form-control" id="time" name="time" min="1" required>
+            <input type="number" class="form-control" id="time" name="time" min="1" max="180" required>
         </div>
 
         <div class="form-group col-md-4 m-2">
             <label for="increment">Increment (seconds)</label>
-            <input type="number" class="form-control" id="increment" name="increment" min="0" required>
+            <input type="number" class="form-control" id="increment" name="increment" min="0" max="60" required>
         </div>
     </div>
 
@@ -64,6 +64,21 @@
         <button type="submit" class="btn btn-success btn-lg m-5 px-5">Add</button>
     </div>
 </form>
+
+<script>
+    let today = new Date();
+    let dd = today.getDate();
+    let mm = today.getMonth() + 1;
+    let yyyy = today.getFullYear();
+    if(dd < 10){
+        dd = '0' + dd;
+    }
+    if(mm < 10){
+        mm = '0' + mm;
+    }
+    today = yyyy + '-' + mm + '-' + dd;
+    document.getElementById('date').setAttribute("max", today);
+</script>
 {% else %}
 <div class="container text-center">
     <h2 class="text-center">You are not logged in</h2>
