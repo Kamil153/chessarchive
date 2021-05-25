@@ -31,6 +31,9 @@ class EditProfileView(generic.UpdateView):
 class GameList(generic.ListView, LoginRequiredMixin):
     model = ChessGame
 
+    def get_queryset(self):
+        return super().get_queryset().filter(user=self.request.user)
+
 
 def add_game(request):
     return render(request, "add_game.html")
