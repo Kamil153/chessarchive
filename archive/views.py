@@ -8,7 +8,8 @@ from archive.models import ChessGame, ChessPlayer, PlayerDetail, GameTime, Movem
 
 from django.shortcuts import render, redirect
 import chess.pgn
-import chess, chess.svg
+import chess
+import chess.svg
 import io
 
 
@@ -30,6 +31,9 @@ class EditProfileView(generic.UpdateView):
 
 class GameList(generic.ListView, LoginRequiredMixin):
     model = ChessGame
+
+    def get_queryset(self):
+        return super().get_queryset().filter(user=self.request.user)
 
 
 def add_game(request):
