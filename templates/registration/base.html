@@ -1,0 +1,11 @@
+<!-- templates/registration/login.html -->
+{% extends 'base.html' %}
+
+{% block body %}
+  <main class="h-100 d-flex justify-content-center align-items-center">
+    <form class="login d-inline-block p-3 border" method="post">
+      {% block form %}
+      {% endblock %}
+    </form>
+  </main>
+{% endblock %}

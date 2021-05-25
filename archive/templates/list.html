@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+{% block title %}Home{% endblock %}
+
+{% load static %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<table class="table align-middle">
+  <tbody>
+    {% for game in object_list %}
+      <tr>
+        <td>{{ game.note }}</td>
+        <td>{{ game.game_time.game_time }}+{{ game.game_time.time_increment }}</td>
+        <td>{{ game.game_date }}</td>
+        <td>
+          {% for player_detail in game.playerdetail_set.all %}
+            {{ player_detail.player.name }} ({{ player_detail.rate }})
+          {% endfor %}
+        </td>
+        <td>
+          <a class="btn btn-primary" href="{% url 'details' pk=game.id %}" role="button">Details</a>
+          <a class="btn btn-danger" href="{% url 'delete-game' game.id %}" role="button">Delete</a>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="container text-center">
+    <h2 class="text-center">You are not logged in</h2>
+    <a href="{% url 'login' %}">Log In</a>
+</div>
+{% endif %}
+{% endblock %}
