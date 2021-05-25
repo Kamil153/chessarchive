@@ -161,18 +161,17 @@ class GameDetailView(generic.DetailView):
 
     def get_result(self, context):
         obj = context['sorted_moves'].last()
-        if obj.white_move in ["1-0", "0-1", "1/2-1/2", "*"]:
+        if obj.white_move in ["1-0", "0-1", "1/2-1/2"]:
             return obj.white_move
-        elif obj.black_move in ["1-0", "0-1", "1/2-1/2", "*"]:
+        elif obj.black_move in ["1-0", "0-1", "1/2-1/2"]:
             return obj.black_move
-        return ''
+        return '???'
 
     def svg_list(self, context):
         moves_list = self.get_moves_list(context['sorted_moves'])
         board = chess.Board()
         svg_list = [chess.svg.board(chess.Board(), size=400)]
         for move in moves_list:
-            print(moves_list)
             if move not in ["1-0", "0-1", "1/2-1/2", "*", ""]:  # '*' and '' when added string is not pgn
                 board.push_san(move)
                 svg_list.append(chess.svg.board(board, size=400))
