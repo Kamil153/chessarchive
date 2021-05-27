@@ -63,13 +63,11 @@ class GameList(generic.ListView, LoginRequiredMixin):
             games = games.filter(movement__move_nr=1, movement__white_move=first_move)
 
         if selected_option and selected_option in ['note', 'game_date', 'game_time']:
-            print(selected_option)
             order_str = selected_option
             if selected_option == 'game_time':
                 order_str += '__game_time'
             if order and order == 'desc':
                 order_str = '-' + order_str
-            print(order_str)
             games = games.order_by(order_str)
 
         return games
