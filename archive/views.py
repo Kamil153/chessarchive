@@ -36,14 +36,15 @@ class GameList(generic.ListView, LoginRequiredMixin):
     model = ChessGame
 
     def get_queryset(self):
-        player_name = self.request.GET.get('player_name', False)
-        date_from = self.request.GET.get('date_from', False)
-        date_to = self.request.GET.get('date_to', False)
-        ranking_from = self.request.GET.get('ranking_from', False)
-        ranking_to = self.request.GET.get('ranking_to', False)
-        game_time = self.request.GET.get('game_time', False)
-        first_move = self.request.GET.get('first_move', False)
-        selected_option = self.request.GET.get('sorting_options', False)
+        player_name = self.request.GET.get('player_name', None)
+        date_from = self.request.GET.get('date_from', None)
+        date_to = self.request.GET.get('date_to', None)
+        ranking_from = self.request.GET.get('ranking_from', None)
+        ranking_to = self.request.GET.get('ranking_to', None)
+        game_time = self.request.GET.get('game_time', None)
+        first_move = self.request.GET.get('first_move', None)
+        selected_option = self.request.GET.get('sort_by', None)
+        order = self.request.GET.get('order', None)
         games = super().get_queryset().filter(user=self.request.user)
 
         if player_name:
@@ -61,23 +62,23 @@ class GameList(generic.ListView, LoginRequiredMixin):
         if first_move:
             games = games.filter(movement__move_nr=1, movement__white_move=first_move)
 
-        if selected_option:
-            if selected_option == 'note':
-                games = games.order_by('note')
-            elif selected_option == '-note':
-                games = games.order_by('-note')
-
-            elif selected_option == 'date':
-                games = games.order_by('game_date')
-            elif selected_option == '-date':
-                games = games.order_by('-game_date')
-
-            elif selected_option == 'game_time':
-                games = games.order_by('game_time__game_time')
-            elif selected_option == '-game_time':
-                games = games.order_by('-game_time__game_time')
+        if selected_option and selected_option in ['note', 'game_date', 'game_time']:
+            print(selected_option)
+            order_str = selected_option
+            if selected_option == 'game_time':
+                order_str += '__game_time'
+            if order and order == 'desc':
+                order_str = '-' + order_str
+            print(order_str)
+            games = games.order_by(order_str)
 
         return games
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['sort_by'] = self.request.GET.get('sort_by', None)
+        context['order'] = self.request.GET.get('order', None)
+        return context
 
 
 def add_game(request):

@@ -5,62 +5,69 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-<div class="container d-flex justify-content-center flex-column">
-  <div class="col-md-3 my-5">
-      <label for="sorting_options">Sort by</label>
-      <form method="get" action="{% url 'list' %}" class=" d-flex">
-        {% csrf_token %}
-        <select id="sorting_options" name="sorting_options" class="form-select form-select-sm mr-3">
-          <option value="date">Date(asc)</option>
-          <option value="-date">Date(desc)</option>
-          <option value="game_time">Game time (asc)</option>
-          <option value="-game_time">Game time (desc) </option>
-          <option value="note" selected>Note (asc)</option>
-          <option value="-note">Note (desc)</option>
-        </select>
-        <button class="btn btn-primary" type="submit">Sort</button>
-      </form>
+<form method="get" action="{% url 'list' %}" class="mt-3">
+  <div class="row">
+    <div class="col-xl-1">
+      <label for="sort_by_id" class="align-middle">Sort by</label>
+    </div>
+    <div class="col-xl-3">
+      <select id="sort_by_id" name="sort_by" class="form-select">
+        <option value="game_date" {% if sort_by == 'game_date' %}selected{% endif %}>Date</option>
+        <option value="game_time" {% if sort_by == 'game_time' %}selected{% endif %}>Game time</option>
+        <option value="note" {% if sort_by == 'note' %}selected{% endif %}>Note</option>
+      </select>
+    </div>
+    <div class="col-xl-2">
+      <label for="sort_order_id" class="d-none">Ordering</label>
+      <select id="sort_order_id" name="order" class="form-select">
+        <option value="asc" {% if order != 'desc' %}selected{% endif %}>Ascending</option>
+        <option value="desc" {% if order == 'desc' %}selected{% endif %}>Descending</option>
+      </select>
+    </div>
+    <div class="col">
+      <button class="btn btn-primary" type="submit">Sort</button>
+    </div>
   </div>
+</form>
 
-  <div class="mb-5 container">
-    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#filters" aria-expanded="false" aria-controls="collapseExample">
-      Filters
-    </button>
-    <div id="filters" class="collapse mt-5 container">
-        <div class="card card-body row container">
-          <form method="get" action="{% url 'list' %}" class="row ">
-            {% csrf_token %}
-            <div class="form-group col-xl-2 col-md-6 d-flex flex-column mb-5">
-              <label>Search by player name:</label>
-              <input id="player_name" name="player_name">
-            </div>
-            <div class="form-group col-xl-2 col-md-6 d-flex flex-column mb-5">
-              <label>Search by date interval:</label>
-              <input name="date_from" id="date_from" type="date">
-              <input name="date_to" id="date_to" type="date">
-            </div>
-            <div class="form-group col-xl-3 col-md-6 d-flex flex-column mb-5">
-              <label>Search by ranking interval:</label>
-              <input name="ranking_from" id="ranking_from" type="number">
-              <input name="ranking_to" id="ranking_to" type="number">
-            </div>
-            <div class="form-group col-xl-2 col-md-6 d-flex flex-column mb-5" >
-              <label>Search by game time:</label>
-              <input type="number" min="1" name="game_time" id="game_time">
-            </div>
-            <div class="form-group col-xl-2 col-md-6 d-flex flex-column">
-              <label>Search by first move:</label>
-              <select id="first_move" name="first_move" class="form-select form-select-sm mr-3">
-                <option disabled selected value="False">--select first move--</option>
-                <option name="e4">e4</option>
-                <option name="e4">d4</option>
-              </select>
-            </div>
-            <button type="submit" class="btn btn-primary mt-3 col-xl-2 col-md-6">Search</button>
-          </form>
-        </div>
+<div class="mb-5 container">
+  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#filters" aria-expanded="false" aria-controls="collapseExample">
+    Filters
+  </button>
+  <div id="filters" class="collapse mt-5 container">
+      <div class="card card-body row container">
+        <form method="get" action="{% url 'list' %}" class="row ">
+          {% csrf_token %}
+          <div class="form-group col-xl-2 col-md-6 d-flex flex-column mb-5">
+            <label>Search by player name:</label>
+            <input id="player_name" name="player_name">
+          </div>
+          <div class="form-group col-xl-2 col-md-6 d-flex flex-column mb-5">
+            <label>Search by date interval:</label>
+            <input name="date_from" id="date_from" type="date">
+            <input name="date_to" id="date_to" type="date">
+          </div>
+          <div class="form-group col-xl-3 col-md-6 d-flex flex-column mb-5">
+            <label>Search by ranking interval:</label>
+            <input name="ranking_from" id="ranking_from" type="number">
+            <input name="ranking_to" id="ranking_to" type="number">
+          </div>
+          <div class="form-group col-xl-2 col-md-6 d-flex flex-column mb-5" >
+            <label>Search by game time:</label>
+            <input type="number" min="1" name="game_time" id="game_time">
+          </div>
+          <div class="form-group col-xl-2 col-md-6 d-flex flex-column">
+            <label>Search by first move:</label>
+            <select id="first_move" name="first_move" class="form-select form-select-sm mr-3">
+              <option disabled selected value="False">--select first move--</option>
+              <option name="e4">e4</option>
+              <option name="e4">d4</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary mt-3 col-xl-2 col-md-6">Search</button>
+        </form>
       </div>
-  </div>
+    </div>
 </div>
 <table class="table align-middle">
   <tbody>
