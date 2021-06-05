@@ -48,7 +48,7 @@ class PlayerDetail(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     friends = models.ManyToManyField('self')
-    invitations = models.ManyToManyField('self', symmetrical=False)
+    invitations = models.ManyToManyField('self', symmetrical=False, related_name='invitations_received')
 
 
 @receiver(post_save, sender=User)

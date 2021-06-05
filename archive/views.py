@@ -1,13 +1,12 @@
 from datetime import datetime
 
-
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.db.models.functions import Coalesce
 from django.urls import reverse_lazy
 from django.views import generic
-from archive.models import ChessGame, ChessPlayer, PlayerDetail, GameTime, Movement
+from archive.models import ChessGame, ChessPlayer, PlayerDetail, GameTime, Movement, Profile
 
 from django.shortcuts import render, redirect
 import chess.pgn
@@ -198,3 +197,55 @@ def delete_event(request, game_id):
         detail.delete()
 
     return redirect('list')  # list-events
+
+
+class FriendList(generic.ListView, LoginRequiredMixin):
+    model = Profile
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['all_users'] = User.objects.all()
+        return context
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def get_queryset(self):
+        username = self.request.GET.get('username', None)
+        users = super().get_queryset().all()
+
+        if username:
+            users = users.filter(user__username=username)
+
+        return users
+
+
+def send_invitation(request, username):
+    user_from = Profile.objects.get(user=request.user)
+    user_to = User.objects.get(username=username)
+
+    user_from.invitations.add(user_to.profile)
+    user_to.profile.invitations_received.add(user_from)
+
+    return redirect('home')
+
+
+def accept_invitation(request, username):
+    user_from = Profile.objects.get(user=request.user)
+    user_to = User.objects.get(username=username)
+
+    user_from.friends.add(user_to.profile)
+    user_to.profile.friends.add(user_from)
+    user_to.profile.invitations.remove(user_from)
+    user_from.invitations_received.remove(user_to.profile)
+
+    return redirect('home')
+
+
+def reject_invitation(request, username):
+    user_from = Profile.objects.get(user=request.user)
+    user_to = User.objects.get(username=username)
+    user_to.profile.invitations.remove(user_from)
+    user_from.invitations_received.remove(user_to.profile)
+
+    return redirect('home')
