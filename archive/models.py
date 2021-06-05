@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 COLORS = (
     ('black', 'black'),
@@ -44,16 +46,17 @@ class PlayerDetail(models.Model):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    friends = models.ManyToManyField(User)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    friends = models.ManyToManyField('self')
+    invitations = models.ManyToManyField('self', symmetrical=False)
 
 
-class Invitation(models.Model):
-    inviting_person = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
-    invited_person = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
 
 
-class SharedGames(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
-    friend = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
-    game = models.ForeignKey(ChessGame, on_delete=models.CASCADE, default=0)
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
