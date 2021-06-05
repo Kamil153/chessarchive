@@ -41,3 +41,19 @@ class PlayerDetail(models.Model):
     color = models.CharField(max_length=6, choices=COLORS, default='white')
     player = models.ForeignKey(ChessPlayer, on_delete=models.CASCADE, default=0)
     game = models.ForeignKey(ChessGame, on_delete=models.CASCADE, default=0)
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    friends = models.ManyToManyField(User)
+
+
+class Invitation(models.Model):
+    inviting_person = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
+    invited_person = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
+
+
+class SharedGames(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
+    friend = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
+    game = models.ForeignKey(ChessGame, on_delete=models.CASCADE, default=0)
