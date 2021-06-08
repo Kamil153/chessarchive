@@ -1,0 +1,7 @@
+screens
+README.MD
+schematBazy.png
+dev.env
+.gitignore
+venv
+db.sqlite3

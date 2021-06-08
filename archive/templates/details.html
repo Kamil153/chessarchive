@@ -4,7 +4,13 @@
 {% load static %}
 
 {% block content %}
-{% if user.is_authenticated %}
+  {% if allow_edit %}
+    {% if object.share %}
+    <a class="btn btn-danger" href="{% url 'game-unshare' pk %}" role="button">Unshare</a>
+    {% else %}
+    <a class="btn btn-success" href="{% url 'game-share' pk %}" role="button">Share</a>
+    {% endif %}
+  {% endif %}
   <div class="d-flex">
     <div class="col-md-8 m-3">
       <table class="table">
@@ -46,7 +52,7 @@
         </tbody>
       </table>
       <div id="svg_div" class="d-flex flex-column justify-content-center">
-        <a class="btn btn-primary mb-3" href="{% url 'list' %}" style="width:100px">Go Back</a><br>
+        <a class="btn btn-primary mb-3" href="{% url 'game-list' %}" style="width:100px">Go Back</a><br>
         <div class="d-flex justify-content-center">
           {{svg |safe}}
         </div>
@@ -105,10 +111,4 @@
         }
     }
   </script>
-{% else %}
-<div class="container text-center">
-    <h2 class="text-center">You are not logged in</h2>
-    <a href="{% url 'login' %}">Log In</a>
-</div>
-{% endif %}
 {% endblock %}

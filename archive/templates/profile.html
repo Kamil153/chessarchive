@@ -4,7 +4,6 @@
 {% load static %}
 
 {% block content %}
-{% if user.is_authenticated %}
     <div class="container d-flex flex-column justify-content-center">
         <form method="post" style="margin: 30px">
             {% csrf_token %}
@@ -17,10 +16,4 @@
             <p>Forgot your password? <a href="{% url 'password_reset' %}">Click here</a></p>
         </form>
     </div>
-{% else %}
-<div class="container text-center">
-    <h2 class="text-center">You are not logged in</h2>
-    <a href="{% url 'login' %}">Log In</a>
-</div>
-{% endif %}
 {% endblock %}
