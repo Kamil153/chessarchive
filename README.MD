@@ -9,6 +9,36 @@ Projekt jest aplikacją webową, która obsługuje bazę danych dla archiwum par
 - Django - web framework
 - Django ORM - system mapowania obiektowo-relacyjnego
 
+## Instrukcja uruchomienia w Dockerze
+
+1. Pobrać repozytorium na dysk
+```shell
+git clone https://github.com/Kamil153/chessarchive.git && cd chessarchive
+```
+2. Stworzyć w głównym katalogu plik .env z danymi potrzebnymi do połączenia z bazą danych według poniższego wzoru
+```shell
+touch .env
+```
+```
+DB_NAME=nazwabazy
+DB_USER=uzytkownik
+DB_PASSWORD=haslo
+DB_HOST=example.com
+DB_PORT=5432
+```
+3. Zbudować obraz
+```shell
+docker build --tag chessarchive .
+```
+4. Zastosować do bazy danych migracje
+```shell
+docker run --env-file ./.env -p 8000:8000 chessarchive python manage.py migrate
+```
+5. Uruchomić serwer
+```shell
+docker run --env-file ./.env -p 8000:8000 chessarchive
+```
+
 ## Schemat bazy danych
 
 ![schematBazy](schematBazy.png)
