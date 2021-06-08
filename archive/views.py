@@ -159,8 +159,8 @@ class GameDetailView(LoginRequiredMixin, UserPassesTestMixin, generic.DetailView
 
     def test_func(self):
         owner = self.get_object().user
-        usr = self.request.user.profile
-        return owner == usr or (self.get_object().share and usr in owner.profile.friends.all())
+        usr = self.request.user
+        return owner == usr or (self.get_object().share and usr.profile in owner.profile.friends.all())
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
