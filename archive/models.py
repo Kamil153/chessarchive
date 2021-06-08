@@ -22,6 +22,7 @@ class ChessGame(models.Model):
     game_time = models.ForeignKey(GameTime, on_delete=models.CASCADE, default=0)
     note = models.TextField()
     game_date = models.DateField()
+    share = models.BooleanField(default=False)
 
 
 class Movement(models.Model):
