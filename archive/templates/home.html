@@ -24,7 +24,7 @@
                       <tbody>
                         {% for friend in user.profile.friends.all %}
                           <tr>
-                            <td class="text-center">{{ friend.user.username }}</td>
+                            <td class="text-center"><a href="{% url 'user-game-list' friend.user.username %}">{{ friend.user.username }}</a></td>
                           </tr>
                         {% endfor %}
                       </tbody>

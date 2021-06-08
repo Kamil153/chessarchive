@@ -4,6 +4,13 @@
 {% load static %}
 
 {% block content %}
+  {% if allow_edit %}
+    {% if object.share %}
+    <a class="btn btn-danger" href="{% url 'game-unshare' pk %}" role="button">Unshare</a>
+    {% else %}
+    <a class="btn btn-success" href="{% url 'game-share' pk %}" role="button">Share</a>
+    {% endif %}
+  {% endif %}
   <div class="d-flex">
     <div class="col-md-8 m-3">
       <table class="table">

@@ -2,6 +2,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.http import Http404
 from django.urls import reverse_lazy
 from django.views import generic, View
 from archive.models import ChessGame, ChessPlayer, PlayerDetail, GameTime, Movement, Profile
@@ -42,7 +43,15 @@ class GameList(LoginRequiredMixin, generic.ListView):
         first_move = self.request.GET.get('first_move', None)
         selected_option = self.request.GET.get('sort_by', None)
         order = self.request.GET.get('order', None)
-        games = super().get_queryset().filter(user=self.request.user)
+        username = self.kwargs.get('username', None)
+        games = super().get_queryset()
+        if username is not None:
+            owner = User.objects.get(username=username)
+            if owner is None:
+                raise Http404()
+            games = games.filter(user=owner, share=True)
+        else:
+            games = games.filter(user=self.request.user)
 
         if player_name:
             games = games.filter(playerdetail__player__name=player_name)
@@ -73,6 +82,8 @@ class GameList(LoginRequiredMixin, generic.ListView):
         context = super().get_context_data(**kwargs)
         context['sort_by'] = self.request.GET.get('sort_by', None)
         context['order'] = self.request.GET.get('order', None)
+        context['private'] = False if 'username' in self.kwargs else True
+        context['owner'] = self.kwargs.get('username', None)
         return context
 
 
@@ -147,7 +158,9 @@ class GameDetailView(LoginRequiredMixin, UserPassesTestMixin, generic.DetailView
     model = ChessGame
 
     def test_func(self):
-        return self.get_object().user == self.request.user
+        owner = self.get_object().user
+        usr = self.request.user.profile
+        return owner == usr or (self.get_object().share and usr in owner.profile.friends.all())
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -156,6 +169,8 @@ class GameDetailView(LoginRequiredMixin, UserPassesTestMixin, generic.DetailView
         context['svg_list'] = self.svg_list(context)
         context['svg'] = chess.svg.board(chess.Board(), size=400)
         context['result'] = self.get_result(context)
+        context['allow_edit'] = True if game.user == self.request.user else False
+        context['pk'] = self.kwargs['pk']
         return context
 
     def get_result(self, context):
@@ -246,3 +261,23 @@ def reject_invitation(request, username):
         user_to.invitations.remove(user_from)
 
     return redirect('home')
+
+
+@login_required
+def share(request, pk):
+    game = ChessGame.objects.get(pk=pk)
+    if game.user != request.user:
+        return redirect('home')
+    game.share = True
+    game.save()
+    return redirect('details', pk)
+
+
+@login_required
+def unshare(request, pk):
+    game = ChessGame.objects.get(pk=pk)
+    if game.user != request.user:
+        redirect('home')
+    game.share = False
+    game.save()
+    return redirect('details', pk)
