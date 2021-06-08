@@ -7,11 +7,11 @@
       <h2 class="text-center" style="width: 100%; margin: 20px 0">Hello, {{ user.username }} !</h2>
 
       <div class="d-flex justify-content-center">
-        <a class="btn btn-success btn-lg" href="{% url 'list' %}" role="button" style="margin-right: 5px">
+        <a class="btn btn-success btn-lg" href="{% url 'game-list' %}" role="button" style="margin-right: 5px">
           Show archive
         </a>
 
-        <a class="btn btn-outline-danger btn-lg" style="margin-left: 5px" href="{% url 'add_game' %}">
+        <a class="btn btn-outline-danger btn-lg" style="margin-left: 5px" href="{% url 'game-add' %}">
           Add new game
         </a>
       </div>

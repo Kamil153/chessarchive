@@ -1,5 +1,5 @@
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
@@ -140,11 +140,14 @@ class AddGameView(LoginRequiredMixin, View):
             i += 1
             j += 2
 
-        return render(request, "add_game.html")
+        return redirect('game-list')
 
 
-class GameDetailView(generic.DetailView):
+class GameDetailView(generic.DetailView, LoginRequiredMixin, UserPassesTestMixin):
     model = ChessGame
+
+    def test_func(self):
+        return self.get_object().user == self.request.user
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -182,19 +185,9 @@ class GameDetailView(generic.DetailView):
         return moves_list
 
 
-def delete_game(request, game_id):
-    game = ChessGame.objects.get(id=game_id)
-    game.delete()
-
-    movement = Movement.objects.filter(game=game_id)
-    for move in movement:
-        move.delete()
-
-    player_details = PlayerDetail.objects.filter(game=game_id)
-    for detail in player_details:
-        detail.delete()
-
-    return redirect('list')  # list-events
+class GameDeleteView(generic.DeleteView):
+    model = ChessGame
+    success_url = reverse_lazy('game-list')
 
 
 class FriendList(generic.ListView, LoginRequiredMixin):
