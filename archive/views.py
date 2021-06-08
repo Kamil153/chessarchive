@@ -29,7 +29,7 @@ class EditProfileView(LoginRequiredMixin, generic.UpdateView):
         return self.request.user
 
 
-class GameList(generic.ListView, LoginRequiredMixin):
+class GameList(LoginRequiredMixin, generic.ListView):
     model = ChessGame
 
     def get_queryset(self):
@@ -143,7 +143,7 @@ class AddGameView(LoginRequiredMixin, View):
         return redirect('game-list')
 
 
-class GameDetailView(generic.DetailView, LoginRequiredMixin, UserPassesTestMixin):
+class GameDetailView(LoginRequiredMixin, UserPassesTestMixin, generic.DetailView):
     model = ChessGame
 
     def test_func(self):
