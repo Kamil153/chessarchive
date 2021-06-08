@@ -184,7 +184,7 @@ class GameDetailView(generic.DetailView):
         return moves_list
 
 
-def delete_event(request, game_id):
+def delete_game(request, game_id):
     game = ChessGame.objects.get(id=game_id)
     game.delete()
 
