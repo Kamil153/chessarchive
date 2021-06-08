@@ -4,7 +4,6 @@
 {% load static %}
 
 {% block content %}
-{% if user.is_authenticated %}
   <div class="d-flex">
     <div class="col-md-8 m-3">
       <table class="table">
@@ -105,10 +104,4 @@
         }
     }
   </script>
-{% else %}
-<div class="container text-center">
-    <h2 class="text-center">You are not logged in</h2>
-    <a href="{% url 'login' %}">Log In</a>
-</div>
-{% endif %}
 {% endblock %}

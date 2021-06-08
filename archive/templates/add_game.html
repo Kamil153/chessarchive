@@ -4,7 +4,6 @@
 {% load static %}
 
 {% block content %}
-{% if user.is_authenticated %}
 <form method="post" action="{% url 'game-add' %}">
   {% csrf_token %}
     <div class="form-row d-flex justify-content-center">
@@ -79,10 +78,4 @@
     today = yyyy + '-' + mm + '-' + dd;
     document.getElementById('date').setAttribute("max", today);
 </script>
-{% else %}
-<div class="container text-center">
-    <h2 class="text-center">You are not logged in</h2>
-    <a href="{% url 'login' %}">Log In</a>
-</div>
-{% endif %}
 {% endblock %}
