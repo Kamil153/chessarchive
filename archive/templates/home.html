@@ -19,7 +19,7 @@
           <div class="col-xl-6 col-md-12 d-flex flex-column">
               <div>
                 <h2 class="text-center">Your friends</h2>
-                {% if user.profile.friends.exists %}
+                {% if user.profile.friends.count > 0 %}
                 <div class="overflow-scroll container" style="height: 250px">
                     <table class="table align-middle">
                       <tbody>
@@ -39,7 +39,7 @@
 
               <div>
                 <h2 class="text-center mt-5">Your invitations</h2>
-                {% if user.profile.invitations_received.exists %}
+                {% if user.profile.invitations_received.count > 0 %}
                 <div class="overflow-scroll container" style="height: 250px">
                     <table class="table align-middle">
                       <tbody>
@@ -63,7 +63,7 @@
           </div>
 
           <div class="col-xl-6 col-md-12">
-               <h2 class="text-center mt-5">Add new friend</h2>
+               <h2 class="text-center mt-5">All users</h2>
                 {% if all_users|length > 1 %}
                 <form method="get" action="{% url 'home' %}" class="row d-flex justify-content-center">
                   {% csrf_token %}
@@ -77,18 +77,14 @@
                     <table class="table justify-content-center mt-5 mx-auto">
                       <tbody>
                         {% for u in object_list %}
-                        {% if user.username != u.user.username %}
-                        {% if not u.friends.exists or user.profile not in u.friends.all %}
-                        {% if not user.profile.invitations.exists or u not in user.profile.invitations.all %}
                           <tr>
                               <td class="text-center" style="width: 50%">{{ u.user.username }}</td>
                               <td class="text-center">
+                                {% if u not in user.profile.friends.all and u not in user.profile.invitations.all and user.profile not in u.invitations.all %}
                                   <a class="btn btn-success" role="button" href="{% url 'send-invitation' u.user.username %}">Send invitation</a>
+                                {% endif %}
                               </td>
                           </tr>
-                        {% endif %}
-                        {% endif %}
-                        {% endif %}
                         {% endfor %}
                       </tbody>
                     </table>

@@ -19,7 +19,7 @@ class SignUpView(generic.CreateView):
     template_name = 'registration/signup.html'
 
 
-class EditProfileView(generic.UpdateView):
+class EditProfileView(LoginRequiredMixin, generic.UpdateView):
     model = User
     success_url = reverse_lazy('home')
     template_name = 'profile.html'
@@ -185,12 +185,12 @@ class GameDetailView(generic.DetailView, LoginRequiredMixin, UserPassesTestMixin
         return moves_list
 
 
-class GameDeleteView(generic.DeleteView):
+class GameDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = ChessGame
     success_url = reverse_lazy('game-list')
 
 
-class FriendList(generic.ListView, LoginRequiredMixin):
+class FriendList(LoginRequiredMixin, generic.ListView):
     model = Profile
 
     def get_context_data(self, **kwargs):
@@ -203,7 +203,7 @@ class FriendList(generic.ListView, LoginRequiredMixin):
 
     def get_queryset(self):
         username = self.request.GET.get('username', None)
-        users = super().get_queryset().all()
+        users = super().get_queryset().exclude(user=self.request.user)
 
         if username:
             users = users.filter(user__username=username)
@@ -211,32 +211,38 @@ class FriendList(generic.ListView, LoginRequiredMixin):
         return users
 
 
+@login_required
 def send_invitation(request, username):
-    user_from = Profile.objects.get(user=request.user)
-    user_to = User.objects.get(username=username)
+    user_from = request.user.profile
+    user_to = User.objects.get(username=username).profile
 
-    user_from.invitations.add(user_to.profile)
-    user_to.profile.invitations_received.add(user_from)
+    if user_to is not None and user_from != user_to \
+            and user_to not in user_from.friends.all() \
+            and user_to not in user_from.invitations.all() \
+            and user_from not in user_to.invitations.all():
+        user_from.invitations.add(user_to)
 
     return redirect('home')
 
 
+@login_required
 def accept_invitation(request, username):
-    user_from = Profile.objects.get(user=request.user)
-    user_to = User.objects.get(username=username)
+    user_from = request.user.profile
+    user_to = User.objects.get(username=username).profile
 
-    user_from.friends.add(user_to.profile)
-    user_to.profile.friends.add(user_from)
-    user_to.profile.invitations.remove(user_from)
-    user_from.invitations_received.remove(user_to.profile)
+    if user_to is not None and user_from != user_to and user_to in user_from.invitations_received.all():
+        user_from.friends.add(user_to)
+        user_to.invitations.remove(user_from)
 
     return redirect('home')
 
 
+@login_required
 def reject_invitation(request, username):
-    user_from = Profile.objects.get(user=request.user)
-    user_to = User.objects.get(username=username)
-    user_to.profile.invitations.remove(user_from)
-    user_from.invitations_received.remove(user_to.profile)
+    user_from = request.user.profile
+    user_to = User.objects.get(username=username).profile
+
+    if user_to is not None and user_from != user_to and user_to in user_from.invitations_received.all():
+        user_to.invitations.remove(user_from)
 
     return redirect('home')
