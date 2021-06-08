@@ -15,7 +15,7 @@ Projekt jest aplikacją webową, która obsługuje bazę danych dla archiwum par
 ```shell
 git clone https://github.com/Kamil153/chessarchive.git && cd chessarchive
 ```
-2. Stworzyć w głównym katalogu plik .env z danymi potrzebnymi do połączenia z bazą danych według poniższego wzoru
+2. Stworzyć w głównym katalogu plik .env z danymi potrzebnymi do połączenia z bazą danych według poniższego wzoru. Na [ElephantSQL](https://www.elephantsql.com/) można za darmo założyć baze danych PostgreSQL.
 ```shell
 touch .env
 ```
