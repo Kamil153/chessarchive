@@ -45,15 +45,15 @@ docker run --env-file ./.env -p 8000:8000 chessarchive
 
 ## Opis tabel
 
-1. Użytkownicy_aplikacji - tabela wszystkich użytkowników korzystających z aplikacji webowej
-2. Tempa_gry - tabela wszystkich możliwych temp gry. Jeżeli podanego przez użytkownika tempa gry w danej partii nie ma w tabeli to jest ona dodawana automatycznie do bazy.
-3. Partie - tabela wszystkich partii w systemie. Zbiera partie wszystkich użytkowników w jedną tabelę.
-4. Szczegóły_gracza - tabela zbierająca informacje na temat gracza aktualne w danej partii.
-5. Ruchy - tabela informująca o ruchach w partii.
-6. Gracze - tabela zbierająca informacje o wprowadzonych graczach partii. Tabela zbiera w jedną tabelę wszystkich graczy wprowadzonych przez wszystkich użytkowników systemu
-7. Znajomi - tabela zawierająca informacje na temat listy znajomych każdego użytkownika
-8. Zaproszenia - tabela gromadząca wszystkie oczekujące zaproszenie do dołączenia do grona znajomych (oczekują tam wszystkie zaproszenia które nie zostały ani zaakceptowane ani odrzucone)
-
+1. auth_user - tabela wszystkich użytkowników korzystających z aplikacji webowej
+2. archive_gametime - tabela wszystkich możliwych temp gry. Jeżeli podanego przez użytkownika tempa gry w danej partii nie ma w tabeli to jest ona dodawana automatycznie do bazy.
+3. archive_chessgame - tabela wszystkich partii w systemie. Zbiera partie wszystkich użytkowników w jedną tabelę.
+4. archive_playerdetails - tabela zbierająca informacje na temat gracza aktualne w danej partii.
+5. archive_movement - tabela informująca o ruchach w partii.
+6. archive_chessplayer - tabela zbierająca informacje o wprowadzonych graczach partii. Tabela zbiera w jedną tabelę wszystkich graczy wprowadzonych przez wszystkich użytkowników systemu
+7. archive_profile_friends - tabela zawierająca informacje na temat listy znajomych każdego użytkownika
+8. archive_profile_invitations - tabela gromadząca wszystkie oczekujące zaproszenie do dołączenia do grona znajomych (oczekują tam wszystkie zaproszenia które nie zostały ani zaakceptowane ani odrzucone)
+9. archive_profile - tabela będąca rozszerzeniem tabeli auth_user o listę znajomych i zaproszeń
 
 ## Przegląd aplikacji
 
