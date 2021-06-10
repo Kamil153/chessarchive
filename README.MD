@@ -244,7 +244,23 @@ def share(request, pk):
 
 
 
-Cofanie udostępnienia partii (aktualizacja pola share w tabeli archive_chessgame). W tym przypadku skorzystaliśmy z generic.DeleteView:
+Cofanie udostępnienia partii (aktualizacja pola share w tabeli archive_chessgame). 
+
+```python
+@login_required
+def unshare(request, pk):
+    game = ChessGame.objects.get(pk=pk)
+    if game.user != request.user:
+        redirect('home')
+    game.share = False
+    game.save()
+    return redirect('details', pk)
+
+```
+
+
+
+Usuwanie partii z bazy. W tym przypadku skorzystaliśmy z generic.DeleteView:
 
 ```python
 class GameDeleteView(LoginRequiredMixin, generic.DeleteView):
