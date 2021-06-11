@@ -48,7 +48,7 @@ docker run --env-file ./.env -p 8000:8000 chessarchive
 1. `auth_user` - tabela wszystkich użytkowników korzystających z aplikacji webowej
 2. `archive_gametime` - tabela wszystkich możliwych temp gry. Jeżeli podanego przez użytkownika tempa gry w danej partii nie ma w tabeli to jest ona dodawana automatycznie do bazy.
 3. `archive_chessgame` - tabela wszystkich partii w systemie. Zbiera partie wszystkich użytkowników w jedną tabelę.
-4. `archive_playerdetails` - tabela zbierająca informacje na temat gracza aktualne w danej partii.
+4. `archive_playerdetail` - tabela zbierająca informacje na temat gracza aktualne w danej partii.
 5. `archive_movement` - tabela informująca o ruchach w partii.
 6. `archive_chessplayer` - tabela zbierająca informacje o wprowadzonych graczach partii.
 7. `archive_profile_friends` - tabela zawierająca informacje o znajomościach pomiędzy użytkownikami (relacja wiele-do-wielu).
@@ -113,14 +113,23 @@ Widoki znajdują się w pliku `archive/models.py`.
 - `unshare` - anuluje udostępnianie partii
 
 
+## Modele
+
+- `GameTime` - mapowany do tabeli `archive_gametime`
+- `ChessGame` - mapowany do tabeli `archive_chessgame`
+- `PlayerDetail` - mapowany do tabeli `archive_playerdetail`
+- `Movement` - mapowany do tabeli `archive_movement`
+- `ChessPlayer` - mapowany do tabeli `archive_chessplayer`
+- `Profile` - rozszerza wbudowany model `User` poprzez relację jeden-do-jednego (`django.db.models.OneToOneField`). Zawiera pola `friends` oraz `invitations`, które w bazie danych generują tabele kolejno `archive_profile_friends` oraz `archive_profile_invitations`, które implementują relacje wiele-do-wielu.
+
+
 ## Interfejs aplikacji
 
-1. Użytkownik niezalogowany ma jedynie możliwość zalogowania się lub założenia konta. Pokazany widok można znaleźć w kodzie tutaj:
-https://github.com/Kamil153/chessarchive/blob/0fc1606e74d173583c63559b3cf16d01bc774cca/archive/templates/home.html#L21
+1. Użytkownik niezalogowany ma jedynie możliwość zalogowania się lub założenia konta.
 
    ![not_logged](screens/not_logged.png)
 
-2. Użytkownik może zalogować się. Ta funkcjonalność (oraz pozostałe funkcjonalności dotyczące rejestracji, resetowania hasła) została zaimplementowana tutaj: https://github.com/Kamil153/chessarchive/tree/master/templates/registration
+2. Użytkownik może zalogować się.
 
    ![log_in](screens/log_in.png)
 
@@ -133,9 +142,6 @@ https://github.com/Kamil153/chessarchive/blob/0fc1606e74d173583c63559b3cf16d01bc
    ![reset](screens/reset.png)
 
 5. Po zalogowaniu użytkownik widzi stronę domową (administrator ma dodatkowe pole "Settings", którego nie widzi każdy inny użytkownik bez uprawnień).
-   Widok html implementujacy stronę domową można znaleźć tutaj: https://github.com/Kamil153/chessarchive/blob/master/archive/templates/home.html
-   Obsługa tego i innych widoków została zaimplementowana w pliku views.py (https://github.com/Kamil153/chessarchive/blob/master/archive/views.py)
-   
 
 ![home](screens/home.png)
 
