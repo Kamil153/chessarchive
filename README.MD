@@ -45,24 +45,91 @@ docker run --env-file ./.env -p 8000:8000 chessarchive
 
 ## Opis tabel
 
-1. auth_user - tabela wszystkich użytkowników korzystających z aplikacji webowej
-2. archive_gametime - tabela wszystkich możliwych temp gry. Jeżeli podanego przez użytkownika tempa gry w danej partii nie ma w tabeli to jest ona dodawana automatycznie do bazy.
-3. archive_chessgame - tabela wszystkich partii w systemie. Zbiera partie wszystkich użytkowników w jedną tabelę.
-4. archive_playerdetails - tabela zbierająca informacje na temat gracza aktualne w danej partii.
-5. archive_movement - tabela informująca o ruchach w partii.
-6. archive_chessplayer - tabela zbierająca informacje o wprowadzonych graczach partii. Tabela zbiera w jedną tabelę wszystkich graczy wprowadzonych przez wszystkich użytkowników systemu
-7. archive_profile_friends - tabela zawierająca informacje na temat listy znajomych każdego użytkownika
-8. archive_profile_invitations - tabela gromadząca wszystkie oczekujące zaproszenie do dołączenia do grona znajomych (oczekują tam wszystkie zaproszenia które nie zostały ani zaakceptowane ani odrzucone)
-9. archive_profile - tabela będąca rozszerzeniem tabeli auth_user o listę znajomych i zaproszeń
+1. `auth_user` - tabela wszystkich użytkowników korzystających z aplikacji webowej
+2. `archive_gametime` - tabela wszystkich możliwych temp gry. Jeżeli podanego przez użytkownika tempa gry w danej partii nie ma w tabeli to jest ona dodawana automatycznie do bazy.
+3. `archive_chessgame` - tabela wszystkich partii w systemie. Zbiera partie wszystkich użytkowników w jedną tabelę.
+4. `archive_playerdetail` - tabela zbierająca informacje na temat gracza aktualne w danej partii.
+5. `archive_movement` - tabela informująca o ruchach w partii.
+6. `archive_chessplayer` - tabela zbierająca informacje o wprowadzonych graczach partii.
+7. `archive_profile_friends` - tabela zawierająca informacje o znajomościach pomiędzy użytkownikami (relacja wiele-do-wielu).
+8. `archive_profile_invitations` - tabela gromadząca wszystkie oczekujące zaproszenia do dołączenia do grona znajomych (oczekują tam wszystkie zaproszenia które nie zostały ani zaakceptowane ani odrzucone)
+9. `archive_profile` - tabela będąca rozszerzeniem tabeli auth_user
 
-## Przegląd aplikacji
+## Struktura plików
 
-1. Użytkownik niezalogowany ma jedynie możliwość zalogowania się lub założenia konta. Pokazany widok można znaleźć w kodzie tutaj:
-https://github.com/Kamil153/chessarchive/blob/0fc1606e74d173583c63559b3cf16d01bc774cca/archive/templates/home.html#L21
+```
+chessarchive
+├── chessarchive
+│   └── ...
+├── archive
+│   ├── templates
+│   │   └── ...
+│   ├── static
+│   │   └── ...
+│   ├── migrations
+│   │   └── ...
+│   ├── admin.py
+│   ├── models.py
+│   ├── urls.py
+│   ├── views.py
+│   └── ...
+├── templates
+└── manage.py
+```
+
+- `chessarchive` - katalog zawierający podstawową konfigurację aplikacji
+- `templates` - katalog zawierający globalne szablony dokumentów html (layout strony, metadane, nawigacja itp.)
+- `archive/templates` - katalog zawierający szablony związane z archiwum
+- `archive/static` - katalog zawierający pliki statyczne do wykorzystania przez przeglądarkę
+- `archive/migrations` - katalog zawierający migracje wykorzystywane do aktualizacji struktury bazy danych w przypadku zmiany modelu.
+- `archive/admin.py` - zawiera informacje o modelach które mają zostać wyświetlane w panelu administratora oraz w jaki sposób.
+- `archive/models.py` - plik zawierający definicje modeli, które później są mapowane do tabel w bazie danych.
+- `archive/urls.py` - zawarta jest tutaj informacja, które widoki mają zostać wyświetlone na określonym URL.
+- `archive/views.py` - definicje widoków
+
+## Widoki
+
+Widoki znajdują się w pliku `archive/models.py`.
+- `SignUpView` - obsługa rejestracji
+- `EditProfileView` - edycja profilu użytkownika
+- `GameList` - wyświetla listę gier użytkownika. Sprawdza, czy w URL znajduje się informacja o właścicielu. Jeśli tak, to wyświetla archiwum właściciela, pod warunkiem, że jest znajomym użytkownika wyświetlającego listę. Widok pozwala na sortowanie oraz filtrowanie według różnych kryteriów. Wykorzystuje do tego dane przekazane w parametrach GET:
+    - `player_name` - filtrowanie według nazwy gracza
+    - `date_from` - minimalna data rozegrania partii
+    - `date_to` - maksymalna data rozegrania partii
+    - `ranking_from` - minimalny ranking
+    - `ranking_to` - maksymalny ranking
+    - `game_time` - czas gry
+    - `first_move` - pierwszy ruch w partii
+    - `sort_by` - kryterium sortowania (`note`, `game_date` lub `game_time`)
+    - `order` - kierunek sortowania (`desc` lub `asc`)
+- `AddGameView` - jeśli zapytanie zostało wysłane metodą GET, to wyświetla formularz, natomiast jeśli została wykorzystana metoda POST, to na podstawie argumentów POST dodaje nową partię do archiwum użytkownika.
+- `GameDetailView` - wyświetla szczegóły dotyczące partii. Jeśli partia nie została dodana przez użytkownika, to sprawdzane są jego uprawnienia do wyświetlania tej partii. Widok wyświetla m.in. posortowane ruchy, szachownica w formacie svg, oraz podstawowe informacje.
+- `GameDeleteView` - jeśli metodą zapytania jest GET, to wyświetla potwierdzenie usunięcia partii, natomiast w przypadku metody POST, partia jest usuwana, o ile użytkownik jest właścicielem tej partii.
+- `FriendList` - widok wykorzystywany na stronie głównej, wyświetla listę znajomych użytkownika oraz listę wszystkich użytkowników.
+- `send_invitation` - widok wysyłający zaproszenie do użytkownika, którego nazwa została przekazana jako parametr URL.
+- `accept_invitation` - odrzuca zaproszenie od użytkownika o nazwie podanej przez parametr URL.
+- `reject_invitation` - podobny do `accept_invitation, odrzuca zaproszenie.
+- `share` - pobiera id partii z parametrów URL oraz udostępnia tę partię znajomym. Tylko właściciel partii może ją udostępnić.
+- `unshare` - anuluje udostępnianie partii
+
+
+## Modele
+
+- `GameTime` - mapowany do tabeli `archive_gametime`
+- `ChessGame` - mapowany do tabeli `archive_chessgame`
+- `PlayerDetail` - mapowany do tabeli `archive_playerdetail`
+- `Movement` - mapowany do tabeli `archive_movement`
+- `ChessPlayer` - mapowany do tabeli `archive_chessplayer`
+- `Profile` - rozszerza wbudowany model `User` poprzez relację jeden-do-jednego (`django.db.models.OneToOneField`). Zawiera pola `friends` oraz `invitations`, które w bazie danych generują tabele kolejno `archive_profile_friends` oraz `archive_profile_invitations`, które implementują relacje wiele-do-wielu.
+
+
+## Interfejs aplikacji
+
+1. Użytkownik niezalogowany ma jedynie możliwość zalogowania się lub założenia konta.
 
    ![not_logged](screens/not_logged.png)
 
-2. Użytkownik może zalogować się. Ta funkcjonalność (oraz pozostałe funkcjonalności dotyczące rejestracji, resetowania hasła) została zaimplementowana tutaj: https://github.com/Kamil153/chessarchive/tree/master/templates/registration
+2. Użytkownik może zalogować się.
 
    ![log_in](screens/log_in.png)
 
@@ -75,39 +142,20 @@ https://github.com/Kamil153/chessarchive/blob/0fc1606e74d173583c63559b3cf16d01bc
    ![reset](screens/reset.png)
 
 5. Po zalogowaniu użytkownik widzi stronę domową (administrator ma dodatkowe pole "Settings", którego nie widzi każdy inny użytkownik bez uprawnień).
-   Widok html implementujacy stronę domową można znaleźć tutaj: https://github.com/Kamil153/chessarchive/blob/master/archive/templates/home.html
-   Obsługa tego i innych widoków została zaimplementowana w pliku views.py (https://github.com/Kamil153/chessarchive/blob/master/archive/views.py)
 
-   ![home](screens/home.png)
+![home](screens/home.png)
 
 6. Użytkownik może edytować informacje takie jak adres email oraz nazwa użytkownika. Może również zmienić hasło (zostanie przeniesiony na widok nr 4)
-   https://github.com/Kamil153/chessarchive/blob/master/archive/templates/profile.html
-   https://github.com/Kamil153/chessarchive/blob/0fc1606e74d173583c63559b3cf16d01bc774cca/archive/views.py#L25
    
-   ![edit](screens/edit.png)
+![edit](screens/edit.png)
 
 7. Każdy zalogowany użytkownik ma opcję dodania nowej partii do swojej bazy
-   https://github.com/Kamil153/chessarchive/blob/master/archive/templates/add_game.html
-   https://github.com/Kamil153/chessarchive/blob/0fc1606e74d173583c63559b3cf16d01bc774cca/archive/views.py#L86
-   ![add_view](screens/add_view.png)
+   
+![add_view](screens/add_view.png)
 
 8. Może również zobaczyć całe swoje archiwum
-   https://github.com/Kamil153/chessarchive/blob/master/archive/templates/list.html
-   https://github.com/Kamil153/chessarchive/blob/0fc1606e74d173583c63559b3cf16d01bc774cca/archive/views.py#L35
-   ![archive_view](screens/archive_view.png)
+   
+![archive_view](screens/archive_view.png)
 
 9. Ma też dostęp do dokładniejszych informacji każdej z partii
-   https://github.com/Kamil153/chessarchive/blob/master/archive/templates/details.html
-   https://github.com/Kamil153/chessarchive/blob/0fc1606e74d173583c63559b3cf16d01bc774cca/archive/views.py#L149
    ![details](screens/details.png)
-
-10. Funkcjonalność bazy danych w programie pgAdmin4
-   ![baza1](screens/baza1.png)
-   ![baza2](screens/baza2.png)
-   ![baza3](screens/baza3.png)
-   ![baza4](screens/baza4.png)
-   ![baza5](screens/baza5.png)
-   ![baza6](screens/baza6.png)
-   ![baza7](screens/baza7.png)
-   ![baza8](screens/baza8.png)
-   ![baza9](screens/baza9.png)
